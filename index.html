@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ShelfVision AI – Shelf audits that add up</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🛒</text></svg>">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,500..900&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#ebe9e3;--card:#fffefa;--ink:#201d18;--mute:#6f685c;--line:#d5d0c4;--ac:#e8530e;--ac2:#fde6d6;--ok:#12805a;--warn:#c27a00;--bad:#c23b22;--dark:#25211b;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0);padding-bottom:env(safe-area-inset-bottom,0)}
+@media(prefers-color-scheme:dark){:root{--bg:#14120f;--card:#1e1b16;--ink:#f1ede3;--mute:#a79f8f;--line:#383228;--ac:#ff7a3d;--ac2:#3a2216;--ok:#4fd1a0;--warn:#ffb340;--bad:#ff8068;--dark:#0c0b09}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 "Source Sans 3",system-ui,sans-serif}
+h1,h2,h3{font-family:Archivo,Impact,sans-serif;font-stretch:78%;margin:0;font-weight:800}
+button,input,select{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--ac);outline-offset:2px}
+.btn{border:0;cursor:pointer;background:var(--ac);color:#fff;padding:10px 18px;border-radius:6px;font-weight:700}
+@media(prefers-color-scheme:dark){.btn{color:#1a0b02}}
+.btn.g{background:transparent;color:var(--ink);border:1.5px solid var(--line)}.btn.s{padding:4px 10px;font-size:13px}.btn.d{background:var(--bad);color:#fff}
+.auth{display:grid;grid-template-columns:1.1fr 1fr;min-height:100vh}
+@media(max-width:860px){.auth{grid-template-columns:1fr}.brand{display:none}}
+.brand{background:var(--dark);color:#f4efe4;padding:48px;display:flex;flex-direction:column;justify-content:space-between;position:relative;overflow:hidden}
+.brand h1{font-size:clamp(52px,7vw,104px);line-height:.88;letter-spacing:-.02em}
+.brand p{max-width:44ch;opacity:.8;font-size:17px}
+.shelfart{display:grid;gap:10px}.shelfart div{display:flex;gap:8px;border-bottom:8px solid #8a6a45;padding-bottom:0}
+.shelfart i{width:46px;height:62px;border-radius:4px 4px 0 0;display:block;border:2px solid var(--ac)}
+.shelfart i.e{border-style:dashed;background:none}
+.logo{font:800 24px Archivo,sans-serif;font-stretch:78%}
+.formside{display:grid;place-items:center;padding:28px 18px}.fc{width:100%;max-width:480px}
+.tabs{display:flex;border-bottom:2px solid var(--line);margin:16px 0}
+.tabs button{flex:1;border:0;background:none;padding:10px;cursor:pointer;font-weight:700;color:var(--mute);border-bottom:3px solid transparent;margin-bottom:-2px}
+.tabs button.on{color:var(--ink);border-color:var(--ac)}
+label{display:block;font-size:13px;font-weight:700;margin:12px 0 4px}
+input[type=text],input[type=email],input[type=tel],input[type=password],input[type=number],select{width:100%;padding:9px 11px;border-radius:6px;border:1.5px solid var(--line);background:var(--card)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.err{color:var(--bad);font-size:13px;min-height:18px;margin-top:8px}.hint{color:var(--mute);font-size:12.5px}
+.app{display:grid;grid-template-columns:210px 1fr;min-height:100vh}
+@media(max-width:860px){.app{grid-template-columns:1fr}}
+.side{background:var(--dark);color:#e8e2d4;padding:22px 14px;display:flex;flex-direction:column;gap:4px;position:sticky;top:0;height:100vh}
+@media(max-width:860px){.side{position:static;height:auto;flex-direction:row;flex-wrap:wrap;align-items:center}}
+.side .logo{color:#fff;margin-bottom:14px}
+.nav{border:0;background:none;text-align:left;padding:10px 12px;border-radius:6px;cursor:pointer;font-weight:700;color:#b9b2a2}
+.nav.on{background:var(--ac);color:#fff}
+.me{margin-top:auto;border-top:1px solid #ffffff22;padding-top:12px;font-size:13px}.me .hint{color:#a9a291}
+.main{padding:26px clamp(16px,3vw,40px);max-width:1140px;width:100%}
+.main h2{font-size:38px}.sub{color:var(--mute);margin:2px 0 20px}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin-bottom:18px}
+.k{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:14px 16px;border-top:4px solid var(--ac)}
+.k span{color:var(--mute);font-size:13px}.k b{display:block;font:800 34px/1.1 Archivo,sans-serif;font-stretch:78%}.k small{color:var(--mute)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:18px;margin-bottom:18px}
+.tw{overflow-x:auto}table{border-collapse:collapse;width:100%;font-size:14px}
+th,td{padding:9px 11px;text-align:left;border-bottom:1px solid var(--line);white-space:nowrap}th{font-size:12.5px;color:var(--mute);font-weight:700}
+td.n,th.n{text-align:right;font-variant-numeric:tabular-nums}
+.pill{border-radius:99px;padding:2px 10px;font-size:12.5px;font-weight:700}
+.p-ok{background:color-mix(in srgb,var(--ok) 18%,transparent);color:var(--ok)}.p-w{background:color-mix(in srgb,var(--warn) 22%,transparent);color:var(--warn)}.p-b{background:color-mix(in srgb,var(--bad) 18%,transparent);color:var(--bad)}.p-n{background:var(--ac2);color:var(--mute)}
+.empty{padding:28px;text-align:center;color:var(--mute)}
+canvas{max-width:100%;border-radius:6px;border:1px solid var(--line);cursor:crosshair;touch-action:none;display:block}
+.pop{position:fixed;inset:0;background:#0007;display:grid;place-items:center;z-index:9}.pop>div{background:var(--card);padding:20px;border-radius:10px;width:min(360px,92vw)}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.step{width:76px;text-align:center}
+code{background:var(--ac2);padding:1px 6px;border-radius:4px;font-size:13px}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script>
+const NS="sv:",$=id=>document.getElementById(id),inr=n=>"₹"+Math.round(n).toLocaleString("en-IN");
+const L=k=>{try{return JSON.parse(localStorage.getItem(NS+k))}catch(e){return null}},S=(k,v)=>{try{localStorage.setItem(NS+k,JSON.stringify(v))}catch(e){alert("Browser storage is full or blocked, so this was not saved.")}};
+const H=async(p,s)=>{try{const b=await crypto.subtle.digest("SHA-256",new TextEncoder().encode(s+p));return[...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,"0")).join("")}catch(e){let h=5381;for(const c of s+p)h=(h*33)^c.charCodeAt(0);return String(h>>>0)}};
+const TYPES={"Kirana / general store":[["Wheat flour 5 kg",1,3,285,6],["Basmati rice 1 kg",1,3,120,5],["Sunflower oil 1 L",2,3,145,8],["Toor dal 1 kg",2,2,160,4],["Tea 250 g",3,3,130,6],["Glucose biscuits",3,4,10,30],["Salt 1 kg",4,2,28,7],["Sugar 1 kg",4,2,46,8]],
+"Supermarket":[["Breakfast cereal 500 g",1,4,220,5],["Pasta 500 g",1,3,95,4],["Packaged juice 1 L",2,4,110,6],["Instant noodles",2,5,14,40],["Chocolate bar",3,6,40,25],["Shampoo 340 ml",3,3,260,3],["Detergent 1 kg",4,3,150,5],["Toothpaste 150 g",4,3,95,6]],
+"Pharmacy":[["Pain relief tablets (strip)",1,4,35,12],["Antacid sachets",1,3,60,5],["Cough syrup 100 ml",2,3,110,4],["Antiseptic liquid 250 ml",2,2,130,3],["Vitamin C tablets",3,3,180,3],["Digital thermometer",3,2,220,1],["Hand sanitiser 200 ml",4,3,90,4],["Bandage roll",4,3,45,3]],
+"Convenience store":[["Bottled water 1 L",1,5,20,40],["Cold drink 600 ml",1,5,40,25],["Chips 50 g",2,6,20,30],["Energy bar",2,3,50,6],["Instant coffee sachet",3,4,10,18],["Notebook",3,2,60,3],["Phone charging cable",4,2,250,1],["Tissue pack",4,3,40,4]]};
+const FREQ={daily:1,weekly:7,fortnightly:14};
+let view="home",authTab="login",step=1,draft={},err="",aud={manual:{},boxes:[],img:null,pend:null};
+const me=()=>L("session"),users=()=>L("users")||{},U=()=>users()[me()];
+function saveU(u){const us=users();us[u.email]=u;S("users",us)}
+// ---- maths ----
+function analyse(u,found){const P=u.products;const rows=P.map(p=>{const f=found[p.id]||0,short=Math.max(0,p.facings-f),st=f==0?"oos":f<p.facings?"short":f>p.facings?"over":"ok";
+  return{p,f,st,short,risk:st=="oos"?p.price*p.perDay:st=="short"?p.price*p.perDay*(short/p.facings):0}});
+ const tot=rows.reduce((a,r)=>a+r.f,0),exp=rows.reduce((a,r)=>a+r.p.facings,0),
+ osa=rows.length?rows.filter(r=>r.f>0).length/rows.length*100:0,comp=exp?rows.reduce((a,r)=>a+Math.min(r.f,r.p.facings),0)/exp*100:0;
+ return{rows,tot,exp,osa,comp,oos:rows.filter(r=>r.st=="oos").length,risk:rows.reduce((a,r)=>a+r.risk,0)}}
+function foundNow(){const f={...aud.manual};aud.boxes.forEach(b=>{if(b.st=="ok")f[b.pid]=(f[b.pid]||0)+1});return f}
+const stPill={oos:'<span class="pill p-b">Out of stock</span>',short:'<span class="pill p-w">Short</span>',ok:'<span class="pill p-ok">On plan</span>',over:'<span class="pill p-n">Over plan</span>'};
+function auditTable(a,showShare){return `<div class=tw><table><thead><tr><th>Product</th><th class=n>Shelf</th><th class=n>Planned</th><th class=n>Found</th>${showShare?"<th class=n>Share of facings</th>":""}<th>Status</th><th class=n>Sales at risk / day</th></tr></thead><tbody>${a.rows.map(r=>`<tr><td><b>${r.p.name}</b></td><td class=n>${r.p.shelf}</td><td class=n>${r.p.facings}</td><td class=n>${r.f}</td>${showShare?`<td class=n>${a.tot?(r.f/a.tot*100).toFixed(1)+"%":"–"}</td>`:""}<td>${stPill[r.st]}</td><td class=n>${r.risk?inr(r.risk):"–"}</td></tr>`).join("")}</tbody></table></div>`}
+function trend(au,target){if(au.length<2)return `<p class=hint>Save at least two audits to see the trend.</p>`;const W=640,Ht=190,xs=i=>40+i*(W-60)/(au.length-1),ys=v=>Ht-26-v*(Ht-50)/100;
+ return `<svg viewBox="0 0 ${W} ${Ht}" style="width:100%" role=img aria-label="On-shelf availability by audit"><line x1=40 x2=${W-20} y1=${ys(target)} y2=${ys(target)} stroke="var(--warn)" stroke-dasharray="5 4"/><text x=${W-22} y=${ys(target)-5} text-anchor=end font-size=11 fill="var(--warn)">Your target ${target}%</text>${[0,50,100].map(v=>`<text x=34 y=${ys(v)+4} text-anchor=end font-size=11 fill="var(--mute)">${v}</text>`).join("")}<polyline fill=none stroke="var(--ac)" stroke-width=3 points="${au.map((a,i)=>xs(i)+","+ys(a.osa)).join(" ")}"/>${au.map((a,i)=>`<circle cx=${xs(i)} cy=${ys(a.osa)} r=4 fill="var(--ac)"/><text x=${xs(i)} y=${Ht-6} text-anchor=middle font-size=10 fill="var(--mute)">${new Date(a.ts).toLocaleDateString("en-IN",{day:"numeric",month:"short"})}</text>`).join("")}</svg>`}
+// ---- views ----
+function authView(){const login=authTab=="login";
+ return `<div class=auth><section class=brand><div class=logo>ShelfVision AI</div><div><h1>Shelf audits that add up.</h1><p style="margin-top:18px">Plan your shelf, count what’s actually there, and get availability, compliance and lost-sales numbers you can act on today.</p></div><div class=shelfart><div><i style="background:#e8b04a55"></i><i style="background:#e8b04a55"></i><i class=e></i><i style="background:#7a4b2a66"></i><i style="background:#d9534f55"></i></div><div><i style="background:#a8623b55"></i><i class=e></i><i style="background:#c9b37e55"></i><i style="background:#c9b37e55"></i></div></div></section>
+ <section class=formside><div class=fc><h2 style="font-size:36px">${login?"Welcome back":"Set up your store"}</h2><p class=hint>${login?"Log in to your audits.":"Step "+step+" of 2 · "+(step==1?"Your details":"Your store")}</p>
+ <div class=tabs><button class="${login?"on":""}" data-a="tab:login">Log in</button><button class="${login?"":"on"}" data-a="tab:signup">Sign up</button></div>
+ <form id=af novalidate>${login?`<label for=em>Email</label><input id=em type=email autocomplete=email><label for=pw>Password</label><input id=pw type=password autocomplete=current-password>`:step==1?
+ `<label for=nm>Full name</label><input id=nm type=text value="${draft.name||""}"><label for=em>Email</label><input id=em type=email value="${draft.email||""}"><label for=ph>Phone</label><input id=ph type=tel placeholder="10-digit number" value="${draft.phone||""}"><label for=pw>Password</label><input id=pw type=password placeholder="At least 8 characters">`:
+ `<label for=sn>Store name</label><input id=sn type=text><div class=two><div><label for=st>Store type</label><select id=st>${Object.keys(TYPES).map(t=>`<option>${t}</option>`).join("")}</select></div><div><label for=ct>City</label><input id=ct type=text></div></div><div class=two><div><label for=sh>Shelves you audit</label><input id=sh type=number min=1 max=20></div><div><label for=fq>Audit how often?</label><select id=fq><option value=daily>Daily</option><option value=weekly selected>Weekly</option><option value=fortnightly>Every two weeks</option></select></div></div><label for=tg>Target on-shelf availability (%)</label><input id=tg type=number min=50 max=100 value=95><p class=hint>Industry practice is to aim above 95%. You can change this later.</p>`}
+ <div class=err id=er role=alert>${err}</div><div class=row style="margin-top:6px">${!login&&step==2?`<button type=button class="btn g" data-a="back">Back</button>`:""}<button class=btn style="flex:1">${login?"Log in":step==1?"Continue":"Create account"}</button></div></form></div></section></div>`}
+function shell(b){const u=U(),nav=[["home","Overview"],["plan","Planogram"],["audit","New audit"],["hist","History"],["profile","My store"]];
+ return `<div class=app><aside class=side><div class=logo>ShelfVision AI</div>${nav.map(n=>`<button class="nav ${view==n[0]?"on":""}" data-a="nav:${n[0]}">${n[1]}</button>`).join("")}<div class=me><b>${u.store}</b><br><span class=hint>${u.name}</span><br><button class="btn g s" style="margin-top:8px;color:#fff;border-color:#ffffff44" data-a="logout">Log out</button></div></aside><main class=main>${b}</main></div>`}
+function home(){const u=U(),au=u.audits,last=au[au.length-1];
+ if(!u.products.length)return shell(`<h2>Welcome, ${u.name.split(" ")[0]}</h2><p class=sub>${u.store} · ${u.type}</p><div class="card empty"><p><b>Start by building your planogram.</b><br>It lists what should be on each shelf and how many facings each product gets.</p><button class=btn data-a="nav:plan">Build planogram</button></div>`);
+ if(!last)return shell(`<h2>${u.store}</h2><p class=sub>${u.products.length} products planned across ${u.shelves} shelves.</p><div class="card empty"><p><b>No audits yet.</b><br>Count facings by hand or mark them on a shelf photo.</p><button class=btn data-a="nav:audit">Start first audit</button></div>`);
+ const a=analyse({products:last.products||u.products},last.found),due=new Date(last.ts+FREQ[u.freq]*864e5),over=due<Date.now();
+ return shell(`<h2>${u.store}</h2><p class=sub>Latest audit: ${new Date(last.ts).toLocaleString("en-IN",{dateStyle:"medium",timeStyle:"short"})} · next due ${due.toLocaleDateString("en-IN",{dateStyle:"medium"})} ${over?'<span class="pill p-w">Overdue</span>':""}</p>
+ <div class=kpis><div class=k><span>On-shelf availability</span><b style="color:${a.osa>=u.target?"var(--ok)":"var(--bad)"}">${a.osa.toFixed(1)}%</b><small>${a.rows.length-a.oos} of ${a.rows.length} products present · target ${u.target}%</small></div><div class=k><span>Planogram compliance</span><b>${a.comp.toFixed(1)}%</b><small>facings placed ÷ facings planned</small></div><div class=k><span>Out of stock</span><b>${a.oos}</b><small>products with zero facings</small></div><div class=k><span>Sales at risk / day</span><b>${inr(a.risk)}</b><small>price × units/day for gaps</small></div></div>
+ <div class=card><h3 style="margin-bottom:8px">Availability over time</h3>${trend(au.map(x=>({ts:x.ts,osa:analyse({products:x.products||u.products},x.found).osa})),u.target)}</div>
+ <div class=card><h3 style="margin-bottom:8px">Latest audit by product</h3>${auditTable(a,true)}<p class=hint style="margin-top:10px">OSA = products with at least one facing ÷ planned products. Compliance = Σ min(found, planned) ÷ Σ planned. Sales at risk uses the price and units-per-day you entered.</p></div>`)}
+function plan(){const u=U();
+ return shell(`<h2>Planogram</h2><p class=sub>What should be on your shelves. Every audit is measured against this.</p>
+ ${u.products.length?"":`<div class=card><h3>Start from a template</h3><p class=hint>A starter list for “${u.type}”. These are example products and quantities. Edit them to match your actual shelf.</p><button class=btn data-a="tpl">Load starter planogram</button></div>`}
+ <div class=card><h3 style="margin-bottom:8px">Add a product</h3><form id=pf class=row style="align-items:end"><div style="flex:2;min-width:160px"><label for=pn>Product</label><input id=pn type=text></div><div style="width:84px"><label for=ps>Shelf</label><input id=ps type=number min=1 max=${u.shelves} value=1></div><div style="width:100px"><label for=pq>Facings</label><input id=pq type=number min=1 value=2></div><div style="width:110px"><label for=pp>Price (₹)</label><input id=pp type=number min=0 step=any></div><div style="width:120px"><label for=pu>Units sold / day</label><input id=pu type=number min=0 step=any></div><button class=btn>Add</button></form><div class=err id=er></div></div>
+ <div class=card>${u.products.length?`<div class=tw><table><thead><tr><th>Product</th><th class=n>Shelf</th><th class=n>Facings</th><th class=n>Price</th><th class=n>Units/day</th><th class=n>Daily sales</th><th></th></tr></thead><tbody>${u.products.map(p=>`<tr><td>${p.name}</td><td class=n>${p.shelf}</td><td class=n>${p.facings}</td><td class=n>${inr(p.price)}</td><td class=n>${p.perDay}</td><td class=n>${inr(p.price*p.perDay)}</td><td><button class="btn g s" data-a="del:${p.id}">Remove</button></td></tr>`).join("")}</tbody></table></div>`:`<div class=empty>No products yet.</div>`}</div>`)}
+function audit(){const u=U();if(!u.products.length)return shell(`<h2>New audit</h2><div class="card empty">Build your planogram first so there is something to audit against.<br><button class=btn data-a="nav:plan" style="margin-top:10px">Go to planogram</button></div>`);
+ const f=foundNow(),a=analyse(u,f),rev=aud.boxes.map((b,i)=>({b,i})).filter(x=>x.b.st=="review");
+ return shell(`<h2>New audit</h2><p class=sub>Enter the facings you count, or mark products on a photo. Totals update as you go.</p>
+ <div class=kpis><div class=k><span>Availability</span><b>${a.osa.toFixed(1)}%</b></div><div class=k><span>Compliance</span><b>${a.comp.toFixed(1)}%</b></div><div class=k><span>Out of stock</span><b>${a.oos}</b></div><div class=k><span>Awaiting review</span><b>${rev.length}</b><small>not counted yet</small></div></div>
+ <div class=card><h3 style="margin-bottom:6px">Mark products on a photo (optional)</h3><p class=hint>Upload a shelf photo, then drag a box around each facing and choose the product.</p><label class="btn g s" style="display:inline-block;cursor:pointer">Choose photo<input id=img type=file accept="image/*" hidden></label>${aud.img?`<button class="btn g s" data-a="rmimg" style="margin-left:6px">Remove photo</button><div style="margin-top:10px"><canvas id=cv></canvas></div>`:""}</div>
+ ${rev.length?`<div class=card><h3 style="margin-bottom:6px">Review queue</h3><table><thead><tr><th>Marked as</th><th></th></tr></thead><tbody>${rev.map(x=>`<tr><td>${u.products.find(p=>p.id==x.b.pid).name}</td><td><button class="btn s" data-a="rvok:${x.i}">Confirm</button> <button class="btn g s" data-a="rvno:${x.i}">Discard</button></td></tr>`).join("")}</tbody></table></div>`:""}
+ <div class=card><h3 style="margin-bottom:6px">Facings counted</h3><div class=tw><table><thead><tr><th>Product</th><th class=n>Shelf</th><th class=n>Planned</th><th class=n>Counted by hand</th><th class=n>From photo</th><th class=n>Total</th><th>Status</th></tr></thead><tbody>${a.rows.map(r=>{const ph=aud.boxes.filter(b=>b.pid==r.p.id&&b.st=="ok").length;return `<tr><td><b>${r.p.name}</b></td><td class=n>${r.p.shelf}</td><td class=n>${r.p.facings}</td><td class=n><input class=step type=number min=0 data-pid=${r.p.id} value="${aud.manual[r.p.id]||0}" aria-label="Facings counted for ${r.p.name}"></td><td class=n>${ph}</td><td class=n>${r.f}</td><td>${stPill[r.st]}</td></tr>`}).join("")}</tbody></table></div>
+ <div class=row style="margin-top:14px"><button class=btn data-a="save">Save audit</button><button class="btn g" data-a="reset">Clear</button><span class=hint>Estimated sales at risk per day: <b>${inr(a.risk)}</b></span></div></div>`)}
+function hist(){const u=U(),au=[...u.audits].reverse();
+ return shell(`<h2>Audit history</h2><p class=sub>Every saved audit, newest first.</p><div class=card>${au.length?`<div class=tw><table><thead><tr><th>Date</th><th class=n>Availability</th><th class=n>Compliance</th><th class=n>Out of stock</th><th class=n>Sales at risk / day</th><th></th></tr></thead><tbody>${au.map(x=>{const a=analyse({products:x.products||u.products},x.found);return `<tr><td>${new Date(x.ts).toLocaleString("en-IN",{dateStyle:"medium",timeStyle:"short"})}</td><td class=n>${a.osa.toFixed(1)}%</td><td class=n>${a.comp.toFixed(1)}%</td><td class=n>${a.oos}</td><td class=n>${inr(a.risk)}</td><td><button class="btn g s" data-a="delaud:${x.ts}">Delete</button></td></tr>`}).join("")}</tbody></table></div>`:`<div class=empty>No audits saved yet.</div>`}</div>`)}
+function prof(){const u=U();
+ return shell(`<h2>My store</h2><p class=sub>These settings define your targets and audit schedule.</p><div class=card><form id=pfm><div class=two><div><label>Name</label><input type=text id=nm value="${u.name}"></div><div><label>Phone</label><input type=tel id=ph value="${u.phone}"></div><div><label>Email</label><input type=email value="${u.email}" disabled></div><div><label>City</label><input type=text id=ct value="${u.city}"></div><div><label>Store name</label><input type=text id=sn value="${u.store}"></div><div><label>Shelves audited</label><input type=number id=sh min=1 value="${u.shelves}"></div><div><label>Audit frequency</label><select id=fq>${Object.keys(FREQ).map(f=>`<option ${f==u.freq?"selected":""}>${f}</option>`).join("")}</select></div><div><label>Target availability (%)</label><input type=number id=tg min=50 max=100 value="${u.target}"></div></div><div class=err id=er></div><button class=btn style="margin-top:10px">Save changes</button></form></div>`)}
+function render(){const r=$("root");if(!me()||!U()){r.innerHTML=authView();bind();return}
+ r.innerHTML=({home,plan,audit,hist,profile:prof})[view=="profile"?"profile":view]();bind();if(view=="audit")drawCv()}
+// ---- photo annotator ----
+let drag=null;
+function drawCv(){const cv=$("cv");if(!cv||!aud.img)return;const w=Math.min(900,cv.parentElement.clientWidth||600),h=w*aud.img.height/aud.img.width;cv.width=w;cv.height=h;const c=cv.getContext("2d");c.drawImage(aud.img,0,0,w,h);const u=U();
+ aud.boxes.forEach(b=>{c.lineWidth=3;c.strokeStyle=b.st=="ok"?"#12c27a":"#ffb340";c.strokeRect(b.x*w,b.y*h,b.w*w,b.h*h);const t=u.products.find(p=>p.id==b.pid).name;c.font="bold 12px sans-serif";c.fillStyle=c.strokeStyle;c.fillRect(b.x*w,b.y*h-16,c.measureText(t).width+8,16);c.fillStyle="#000";c.fillText(t,b.x*w+4,b.y*h-4)});
+ if(drag){c.strokeStyle="#e8530e";c.setLineDash([6,4]);c.strokeRect(drag.x0,drag.y0,drag.x1-drag.x0,drag.y1-drag.y0);c.setLineDash([])}
+ const pos=e=>{const r=cv.getBoundingClientRect();return[(e.clientX-r.left)*cv.width/r.width,(e.clientY-r.top)*cv.height/r.height]};
+ cv.onpointerdown=e=>{const[x,y]=pos(e);drag={x0:x,y0:y,x1:x,y1:y};cv.setPointerCapture(e.pointerId)};
+ cv.onpointermove=e=>{if(!drag)return;[drag.x1,drag.y1]=pos(e);drawCv()};
+ cv.onpointerup=e=>{if(!drag)return;const d=drag;drag=null;const x=Math.min(d.x0,d.x1),y=Math.min(d.y0,d.y1),bw=Math.abs(d.x1-d.x0),bh=Math.abs(d.y1-d.y0);if(bw<12||bh<12)return drawCv();aud.pend={x:x/cv.width,y:y/cv.height,w:bw/cv.width,h:bh/cv.height};popup()}}
+function popup(){const u=U(),d=document.createElement("div");d.className="pop";d.id="pp";d.innerHTML=`<div><h3 style="margin-bottom:8px">Which product is this?</h3><select id=pps>${u.products.map(p=>`<option value=${p.id}>${p.name}</option>`).join("")}</select><label style="display:flex;gap:8px;align-items:center;font-weight:500"><input type=checkbox id=ppu> I’m not sure. Send to review queue</label><div class=row style="margin-top:14px"><button class=btn id=ppo>Add</button><button class="btn g" id=ppc>Cancel</button></div></div>`;document.body.appendChild(d);
+ $("ppo").onclick=()=>{aud.boxes.push({...aud.pend,pid:+$("pps").value,st:$("ppu").checked?"review":"ok"});aud.pend=null;d.remove();render()};$("ppc").onclick=()=>{aud.pend=null;d.remove();drawCv()}}
+const checked=n=>[...document.querySelectorAll(`input[name=${n}]:checked`)].map(i=>i.value);
+function bind(){
+ const af=$("af");if(af)af.onsubmit=async e=>{e.preventDefault();err="";
+  if(authTab=="login"){const em=$("em").value.trim().toLowerCase(),u=users()[em];if(!u||u.h!==await H($("pw").value,u.salt)){err="Email or password is incorrect.";return render()}S("session",em);view="home";return render()}
+  if(step==1){const d={name:$("nm").value.trim(),email:$("em").value.trim().toLowerCase(),phone:$("ph").value.replace(/\D/g,""),pw:$("pw").value};
+   if(d.name.length<2)err="Enter your full name.";else if(!/^\S+@\S+\.\S+$/.test(d.email))err="Enter a valid email address.";else if(d.phone.length<10)err="Phone number needs at least 10 digits.";else if(users()[d.email])err="An account with this email already exists. Log in instead.";else if(d.pw.length<8)err="Password needs at least 8 characters.";
+   draft={...draft,...d};if(err)return render();step=2;return render()}
+  const sn=$("sn").value.trim(),sh=+$("sh").value,tg=+$("tg").value;
+  if(!sn)err="Enter your store name.";else if(!(sh>=1))err="Enter how many shelves you audit.";else if(!(tg>=50&&tg<=100))err="Target must be between 50 and 100.";if(err)return render();
+  const salt=[...crypto.getRandomValues(new Uint8Array(8))].join("");
+  saveU({name:draft.name,email:draft.email,phone:draft.phone,city:$("ct").value.trim(),salt,h:await H(draft.pw,salt),store:sn,type:$("st").value,shelves:sh,freq:$("fq").value,target:tg,products:[],audits:[]});
+  S("session",draft.email);draft={};step=1;view="home";render()};
+ const pf=$("pf");if(pf)pf.onsubmit=e=>{e.preventDefault();const u=U(),n=$("pn").value.trim(),s=+$("ps").value,q=+$("pq").value,p=+$("pp").value,d=+$("pu").value;
+  if(!n||!(s>=1&&s<=u.shelves)||!(q>=1)||!(p>=0)||$("pp").value===""||$("pu").value===""||!(d>=0)){$("er").textContent=`Fill every field. Shelf must be 1 to ${u.shelves}, facings at least 1.`;return}
+  u.products.push({id:Date.now(),name:n,shelf:s,facings:q,price:p,perDay:d});saveU(u);render()};
+ const pfm=$("pfm");if(pfm)pfm.onsubmit=e=>{e.preventDefault();const u=U(),tg=+$("tg").value,sh=+$("sh").value;if(!(tg>=50&&tg<=100)||!(sh>=1)){$("er").textContent="Target must be 50–100 and shelves at least 1.";return}
+  Object.assign(u,{name:$("nm").value.trim()||u.name,phone:$("ph").value.replace(/\D/g,""),city:$("ct").value.trim(),store:$("sn").value.trim()||u.store,shelves:sh,freq:$("fq").value,target:tg});saveU(u);view="home";render()};
+ document.querySelectorAll("input[data-pid]").forEach(i=>i.onchange=()=>{aud.manual[i.dataset.pid]=Math.max(0,Math.floor(+i.value||0));render()});
+ const im=$("img");if(im)im.onchange=()=>{const f=im.files[0];if(!f)return;const i=new Image();i.onload=()=>{aud.img=i;aud.boxes=[];render()};i.src=URL.createObjectURL(f)}}
+document.addEventListener("click",e=>{const a=e.target.closest("[data-a]")?.dataset.a;if(!a)return;const[k,v]=a.split(":");const u=me()?U():null;
+ if(k=="tab"){authTab=v;step=1;err="";render()}else if(k=="back"){step=1;render()}else if(k=="nav"){view=v;render()}else if(k=="logout"){S("session",null);authTab="login";render()}
+ else if(k=="tpl"){TYPES[u.type].forEach((r,i)=>u.products.push({id:Date.now()+i,name:r[0],shelf:Math.min(r[1],u.shelves),facings:r[2],price:r[3],perDay:r[4]}));saveU(u);render()}
+ else if(k=="del"){u.products=u.products.filter(p=>p.id!=v);saveU(u);render()}
+ else if(k=="rmimg"){aud.img=null;aud.boxes=[];render()}
+ else if(k=="rvok"){aud.boxes[+v].st="ok";render()}else if(k=="rvno"){aud.boxes.splice(+v,1);render()}
+ else if(k=="reset"){aud={manual:{},boxes:[],img:null,pend:null};render()}
+ else if(k=="save"){const f=foundNow();u.audits.push({ts:Date.now(),found:f,products:u.products});saveU(u);aud={manual:{},boxes:[],img:null,pend:null};view="home";render()}
+ else if(k=="delaud"){u.audits=u.audits.filter(x=>x.ts!=+v);saveU(u);render()}});
+render();
+</script>
+</body>
+</html>
